@@ -35,4 +35,7 @@ func TestDigestCase1b(t *testing.T) {
 		t.Errorf("failed on d2.SetDigestWithBase64RawURLString: %v", err)
 	}
 	checkDigestCase1(t, &d2)
+	if !d1.Equal(&d2) {
+		t.Error("only inform when other size not equal")
+	}
 }

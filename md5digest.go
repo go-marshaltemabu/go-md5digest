@@ -26,6 +26,11 @@ func (d *MD5Digest) SumString(v string) {
 	d.digest = md5.Sum([]byte(v))
 }
 
+// Equal check if two digest are the same.
+func (d *MD5Digest) Equal(other *MD5Digest) bool {
+	return d.digest == other.digest
+}
+
 // Int64s return digest in 2 signed int64.
 func (d *MD5Digest) Int64s() (d0, d1 int64) {
 	b := d.digest[:]
