@@ -2,6 +2,7 @@ package md5digest_test
 
 import (
 	"crypto/md5"
+	"encoding/json"
 	"testing"
 
 	md5digest "github.com/go-marshaltemabu/go-md5digest"
@@ -111,6 +112,28 @@ func TestDigestCase1c(t *testing.T) {
 	}
 }
 
+func TestDigestCase1dJSONMarshal(t *testing.T) {
+	var d1 md5digest.MD5Digest
+	d1.SumString("HelloWorld.\n")
+	buf1, err := json.Marshal(&d1)
+	if nil != err {
+		t.Errorf("json Marshal failed: %v", err)
+	}
+	if string(buf1) != "\"kC8ueJlos5hO_dK2a8jn4A\"" {
+		t.Errorf("unexpect json encode result: %v", string(buf1))
+	}
+	checkDigestCase1(t, &d1)
+}
+
+func TestDigestCase1dJSONUnmarshal(t *testing.T) {
+	jsonContent := []byte("\"kC8ueJlos5hO_dK2a8jn4A\"")
+	var d1 md5digest.MD5Digest
+	if err := json.Unmarshal(jsonContent, &d1); nil != err {
+		t.Errorf("json Unmarshal failed: %v", err)
+	}
+	checkDigestCase1(t, &d1)
+}
+
 func TestEqual1(t *testing.T) {
 	var d1 md5digest.MD5Digest
 	var d2 md5digest.MD5Digest
@@ -132,5 +155,23 @@ func TestEqual1(t *testing.T) {
 	}
 	if !d1.Equal(&d1) {
 		t.Error("expect equal for d1 and d1")
+	}
+}
+
+func BenchmarkJSONMarshal(b *testing.B) {
+	var d1 md5digest.MD5Digest
+	d1.SumString("HelloWorld.\n")
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		json.Marshal(&d1)
+	}
+}
+
+func BenchmarkJSONUnmarshal(b *testing.B) {
+	var d1 md5digest.MD5Digest
+	jsonContent := []byte("\"kC8ueJlos5hO_dK2a8jn4A\"")
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		json.Unmarshal(jsonContent, &d1)
 	}
 }
