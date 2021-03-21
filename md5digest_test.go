@@ -39,3 +39,27 @@ func TestDigestCase1b(t *testing.T) {
 		t.Error("only inform when other size not equal")
 	}
 }
+
+func TestEqual1(t *testing.T) {
+	var d1 md5digest.MD5Digest
+	var d2 md5digest.MD5Digest
+	var d3 md5digest.MD5Digest
+	d1.SumString("HelloWorld.\n")
+	d2.SumString("x")
+	d3.SumBytes([]byte("HelloWorld.\n"))
+	if d1.Equal(&d2) {
+		t.Error("expect not equal for d1 and d2")
+	}
+	if d2.Equal(&d3) {
+		t.Error("expect not equal for d2 and d3")
+	}
+	if !d1.Equal(&d3) {
+		t.Error("expect equal for d1 and d3")
+	}
+	if !d3.Equal(&d1) {
+		t.Error("expect equal for d3 and d1")
+	}
+	if !d1.Equal(&d1) {
+		t.Error("expect equal for d1 and d1")
+	}
+}
