@@ -24,7 +24,7 @@ func TestDigestCase1a(t *testing.T) {
 	checkDigestCase1(t, &d1)
 }
 
-func TestDigestCase1b(t *testing.T) {
+func TestDigestCase1bURL(t *testing.T) {
 	var d1 md5digest.MD5Digest
 	d1.SumString("HelloWorld.\n")
 	checkDigestCase1(t, &d1)
@@ -36,6 +36,28 @@ func TestDigestCase1b(t *testing.T) {
 	}
 	checkDigestCase1(t, &d2)
 	if !d1.Equal(&d2) {
+		t.Error("only inform when other size not equal")
+	}
+	if !d2.Equal(&d1) {
+		t.Error("only inform when other size not equal")
+	}
+}
+
+func TestDigestCase1bStd(t *testing.T) {
+	var d1 md5digest.MD5Digest
+	d1.SumString("HelloWorld.\n")
+	checkDigestCase1(t, &d1)
+	b64string := d1.Base64RawStdString()
+	t.Logf("d1.Base64RawStdString: %s", b64string)
+	var d2 md5digest.MD5Digest
+	if err := d2.SetDigestWithBase64RawStdString(b64string); nil != err {
+		t.Errorf("failed on d2.SetDigestWithBase64RawStdString: %v", err)
+	}
+	checkDigestCase1(t, &d2)
+	if !d1.Equal(&d2) {
+		t.Error("only inform when other size not equal")
+	}
+	if !d2.Equal(&d1) {
 		t.Error("only inform when other size not equal")
 	}
 }

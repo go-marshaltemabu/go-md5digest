@@ -61,12 +61,7 @@ func (d *MD5Digest) SetDigestWithUint64s(d0, d1 uint64) {
 	binary.LittleEndian.PutUint64(b[8:], d1)
 }
 
-// Base64RawURLString return digest in base64url-nopadding encoded string.
-func (d *MD5Digest) SetDigestWithBase64RawURLString(s string) (err error) {
-	buf, err := base64.RawURLEncoding.DecodeString(s)
-	if nil != err {
-		return
-	}
+func (d *MD5Digest) setDigestWithBytes(buf []byte) (err error) {
 	if len(buf) != md5.Size {
 		err = &ErrIncorrectSize{
 			ReceivedBufferSize: len(buf),
@@ -80,4 +75,29 @@ func (d *MD5Digest) SetDigestWithBase64RawURLString(s string) (err error) {
 // Base64RawURLString return digest in base64url-nopadding encoded string.
 func (d *MD5Digest) Base64RawURLString() string {
 	return base64.RawURLEncoding.EncodeToString(d.digest[:])
+}
+
+// SetDigestWithBase64RawURLString return digest in base64url-nopadding encoded string.
+func (d *MD5Digest) SetDigestWithBase64RawURLString(s string) (err error) {
+	buf, err := base64.RawURLEncoding.DecodeString(s)
+	if nil != err {
+		return
+	}
+	d.setDigestWithBytes(buf)
+	return
+}
+
+// Base64RawStdString return digest in base64std-nopadding encoded string.
+func (d *MD5Digest) Base64RawStdString() string {
+	return base64.RawStdEncoding.EncodeToString(d.digest[:])
+}
+
+// SetDigestWithBase64RawStdString return digest in base64std-nopadding encoded string.
+func (d *MD5Digest) SetDigestWithBase64RawStdString(s string) (err error) {
+	buf, err := base64.RawStdEncoding.DecodeString(s)
+	if nil != err {
+		return
+	}
+	d.setDigestWithBytes(buf)
+	return
 }
