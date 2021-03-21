@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/base64"
 	"encoding/binary"
+	"encoding/hex"
 )
 
 // MD5Digest contain MD5 message digest.
@@ -77,7 +78,7 @@ func (d *MD5Digest) Base64RawURLString() string {
 	return base64.RawURLEncoding.EncodeToString(d.digest[:])
 }
 
-// SetDigestWithBase64RawURLString return digest in base64url-nopadding encoded string.
+// SetDigestWithBase64RawURLString set digest with given base64url-nopadding encoded string.
 func (d *MD5Digest) SetDigestWithBase64RawURLString(s string) (err error) {
 	buf, err := base64.RawURLEncoding.DecodeString(s)
 	if nil != err {
@@ -92,9 +93,24 @@ func (d *MD5Digest) Base64RawStdString() string {
 	return base64.RawStdEncoding.EncodeToString(d.digest[:])
 }
 
-// SetDigestWithBase64RawStdString return digest in base64std-nopadding encoded string.
+// SetDigestWithBase64RawStdString set digest with given base64std-nopadding encoded string.
 func (d *MD5Digest) SetDigestWithBase64RawStdString(s string) (err error) {
 	buf, err := base64.RawStdEncoding.DecodeString(s)
+	if nil != err {
+		return
+	}
+	d.setDigestWithBytes(buf)
+	return
+}
+
+// HexString return digest in hex encoded string.
+func (d *MD5Digest) HexString() string {
+	return hex.EncodeToString(d.digest[:])
+}
+
+// SetDigestWithHexString return digest in base64std-nopadding encoded string.
+func (d *MD5Digest) SetDigestWithHexString(s string) (err error) {
+	buf, err := hex.DecodeString(s)
 	if nil != err {
 		return
 	}

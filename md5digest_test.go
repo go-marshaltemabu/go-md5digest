@@ -24,7 +24,7 @@ func TestDigestCase1a(t *testing.T) {
 	checkDigestCase1(t, &d1)
 }
 
-func TestDigestCase1bURL(t *testing.T) {
+func TestDigestCase1b64URL(t *testing.T) {
 	var d1 md5digest.MD5Digest
 	d1.SumString("HelloWorld.\n")
 	checkDigestCase1(t, &d1)
@@ -43,7 +43,7 @@ func TestDigestCase1bURL(t *testing.T) {
 	}
 }
 
-func TestDigestCase1bStd(t *testing.T) {
+func TestDigestCase1b64Std(t *testing.T) {
 	var d1 md5digest.MD5Digest
 	d1.SumString("HelloWorld.\n")
 	checkDigestCase1(t, &d1)
@@ -52,6 +52,25 @@ func TestDigestCase1bStd(t *testing.T) {
 	var d2 md5digest.MD5Digest
 	if err := d2.SetDigestWithBase64RawStdString(b64string); nil != err {
 		t.Errorf("failed on d2.SetDigestWithBase64RawStdString: %v", err)
+	}
+	checkDigestCase1(t, &d2)
+	if !d1.Equal(&d2) {
+		t.Error("only inform when other size not equal")
+	}
+	if !d2.Equal(&d1) {
+		t.Error("only inform when other size not equal")
+	}
+}
+
+func TestDigestCase1bHex(t *testing.T) {
+	var d1 md5digest.MD5Digest
+	d1.SumString("HelloWorld.\n")
+	checkDigestCase1(t, &d1)
+	hexString := d1.HexString()
+	t.Logf("d1.HexString: %s", hexString)
+	var d2 md5digest.MD5Digest
+	if err := d2.SetDigestWithHexString(hexString); nil != err {
+		t.Errorf("failed on d2.SetDigestWithHexString: %v", err)
 	}
 	checkDigestCase1(t, &d2)
 	if !d1.Equal(&d2) {
@@ -77,6 +96,18 @@ func TestDigestCase1c(t *testing.T) {
 	}
 	if b64str := d2.Base64RawURLString(); b64str != "kC8ueJlos5hO_dK2a8jn4A" {
 		t.Errorf("unexpected base64url string (d2): %s", b64str)
+	}
+	if b64str := d1.Base64RawStdString(); b64str != "kC8ueJlos5hO/dK2a8jn4A" {
+		t.Errorf("unexpected base64std string (d1): %s", b64str)
+	}
+	if b64str := d2.Base64RawStdString(); b64str != "kC8ueJlos5hO/dK2a8jn4A" {
+		t.Errorf("unexpected base64std string (d2): %s", b64str)
+	}
+	if hexStr := d1.HexString(); hexStr != "902f2e789968b3984efdd2b66bc8e7e0" {
+		t.Errorf("unexpected hex string (d1): %s", hexStr)
+	}
+	if hexStr := d2.HexString(); hexStr != "902f2e789968b3984efdd2b66bc8e7e0" {
+		t.Errorf("unexpected hex string (d2): %s", hexStr)
 	}
 }
 
