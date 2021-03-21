@@ -9,6 +9,7 @@ const expectJSONDataSize = 22 + 2
 
 // base64.RawURLEncoding.EncodedLen(md5.Size) == 22
 
+/*
 // MarshalJSON implements the json.Marshaler interface.
 func (d *MD5Digest) MarshalJSON() (data []byte, err error) {
 	enc := base64.RawURLEncoding
@@ -18,6 +19,7 @@ func (d *MD5Digest) MarshalJSON() (data []byte, err error) {
 	data[23] = '"'
 	return
 }
+*/
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (d *MD5Digest) UnmarshalJSON(data []byte) (err error) {
