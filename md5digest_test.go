@@ -40,6 +40,24 @@ func TestDigestCase1b(t *testing.T) {
 	}
 }
 
+func TestDigestCase1c(t *testing.T) {
+	var d1 md5digest.MD5Digest
+	d1.SetDigestWithUint64s(0x98b36899782e2f90, 0xe0e7c86bb6d2fd4e)
+	checkDigestCase1(t, &d1)
+	var d2 md5digest.MD5Digest
+	d2.SetDigestWithInt64s(-7443490750757720176, -2240601924639195826)
+	checkDigestCase1(t, &d2)
+	if !d1.Equal(&d2) {
+		t.Error("only inform when other size not equal")
+	}
+	if b64str := d1.Base64RawURLString(); b64str != "kC8ueJlos5hO_dK2a8jn4A" {
+		t.Errorf("unexpected base64url string (d1): %s", b64str)
+	}
+	if b64str := d2.Base64RawURLString(); b64str != "kC8ueJlos5hO_dK2a8jn4A" {
+		t.Errorf("unexpected base64url string (d2): %s", b64str)
+	}
+}
+
 func TestEqual1(t *testing.T) {
 	var d1 md5digest.MD5Digest
 	var d2 md5digest.MD5Digest

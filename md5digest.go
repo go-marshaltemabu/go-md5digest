@@ -39,12 +39,26 @@ func (d *MD5Digest) Int64s() (d0, d1 int64) {
 	return
 }
 
+// SetDigestWithInt64s put given int64 into digest.
+func (d *MD5Digest) SetDigestWithInt64s(d0, d1 int64) {
+	b := d.digest[:]
+	binary.LittleEndian.PutUint64(b[0:], uint64(d0))
+	binary.LittleEndian.PutUint64(b[8:], uint64(d1))
+}
+
 // Uint64s return digest in 2 unsigned int64.
 func (d *MD5Digest) Uint64s() (d0, d1 uint64) {
 	b := d.digest[:]
 	d0 = binary.LittleEndian.Uint64(b[0:])
 	d1 = binary.LittleEndian.Uint64(b[8:])
 	return
+}
+
+// SetDigestWithUint64s put given unsigned int64 into digest.
+func (d *MD5Digest) SetDigestWithUint64s(d0, d1 uint64) {
+	b := d.digest[:]
+	binary.LittleEndian.PutUint64(b[0:], d0)
+	binary.LittleEndian.PutUint64(b[8:], d1)
 }
 
 // Base64RawURLString return digest in base64url-nopadding encoded string.
