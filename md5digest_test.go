@@ -158,6 +158,28 @@ func TestEqual1(t *testing.T) {
 	}
 }
 
+func TestEmpty1(t *testing.T) {
+	d1 := md5digest.NewMD5DigestWithBase64RawURLString("kC8ueJlos5hO_dK2a8jn4A")
+	checkDigestCase1(t, &d1)
+	if d1.IsEmpty() {
+		t.Errorf("d1 should not be empty")
+	}
+	var d2 md5digest.MD5Digest
+	if !d2.IsEmpty() {
+		t.Errorf("d2 should be empty")
+	}
+	if d1.Equal(&d2) {
+		t.Error("expect not equal for d1 and d2")
+	}
+	d1.Clear()
+	if !d1.IsEmpty() {
+		t.Errorf("d1 should be empty")
+	}
+	if !d1.Equal(&d2) {
+		t.Error("expect equal for d1 and d2")
+	}
+}
+
 func BenchmarkJSONMarshal(b *testing.B) {
 	var d1 md5digest.MD5Digest
 	d1.SumString("HelloWorld.\n")

@@ -7,9 +7,50 @@ import (
 	"encoding/hex"
 )
 
+var emptyDigest [md5.Size]byte
+
 // MD5Digest contain MD5 message digest.
 type MD5Digest struct {
 	digest [md5.Size]byte
+}
+
+// NewMD5DigestWithInt64s create new instance of MD5Digest and initialize with int64s.
+func NewMD5DigestWithInt64s(d0, d1 int64) (d MD5Digest) {
+	d.SetDigestWithInt64s(d0, d1)
+	return
+}
+
+// NewMD5DigestWithUint64s create new instance of MD5Digest and initialize with unsigned int64s.
+func NewMD5DigestWithUint64s(d0, d1 uint64) (d MD5Digest) {
+	d.SetDigestWithUint64s(d0, d1)
+	return
+}
+
+// NewMD5DigestWithBase64RawURLString create new instance of MD5Digest and initialize with base64url encoded string.
+// An empty digest will be return if error occurs on decoding given string.
+func NewMD5DigestWithBase64RawURLString(s string) (d MD5Digest) {
+	if err := d.SetDigestWithBase64RawURLString(s); nil != err {
+		d.digest = emptyDigest
+	}
+	return
+}
+
+// NewMD5DigestWithBase64RawStdString create new instance of MD5Digest and initialize with base64std encoded string.
+// An empty digest will be return if error occurs on decoding given string.
+func NewMD5DigestWithBase64RawStdString(s string) (d MD5Digest) {
+	if err := d.SetDigestWithBase64RawStdString(s); nil != err {
+		d.digest = emptyDigest
+	}
+	return
+}
+
+// NewMD5DigestWithHexString create new instance of MD5Digest and initialize with hex encoded string.
+// An empty digest will be return if error occurs on decoding given string.
+func NewMD5DigestWithHexString(s string) (d MD5Digest) {
+	if err := d.SetDigestWithHexString(s); nil != err {
+		d.digest = emptyDigest
+	}
+	return
 }
 
 // SetDigest set digest given checksum.
@@ -25,6 +66,16 @@ func (d *MD5Digest) SumBytes(buf []byte) {
 // SumString set digest with given string.
 func (d *MD5Digest) SumString(v string) {
 	d.digest = md5.Sum([]byte(v))
+}
+
+// Clear set digest to zero.
+func (d *MD5Digest) Clear() {
+	d.digest = emptyDigest
+}
+
+// IsEmpty check if digest is zero.
+func (d *MD5Digest) IsEmpty() bool {
+	return (d.digest == emptyDigest)
 }
 
 // Equal check if two digest are the same.
