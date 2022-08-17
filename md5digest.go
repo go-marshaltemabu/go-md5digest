@@ -106,6 +106,11 @@ func (d *MD5Digest) Uint64s() (d0, d1 uint64) {
 	return
 }
 
+// CopyBytesTo copy digest bytes into given byte slice.
+func (d *MD5Digest) CopyBytesTo(b []byte) int {
+	return copy(b, d.digest[:])
+}
+
 // SetDigestWithUint64s put given unsigned int64 into digest.
 func (d *MD5Digest) SetDigestWithUint64s(d0, d1 uint64) {
 	b := d.digest[:]
